@@ -13,8 +13,8 @@ backoff() {
 while [ $attempt -le $max_attempts ]; do
     if mkdir "$lockdir"; then
         echo "Connected to the Server."
-        echo "ASSIGN" > /ticket/application/addaticket
-        if read response < /ticket/application/ticketresponse; then
+        echo "ASSIGN" > $addpipe
+        if read response < $responsepipe; then
            echo $response
             rmdir "$lockdir"
             break  # Exit the loop if successful
@@ -29,3 +29,4 @@ done
 if [ $attempt -gt $max_attempts ]; then
     echo "Failed to connect to the server after $max_attempts attempts."
 fi
+
