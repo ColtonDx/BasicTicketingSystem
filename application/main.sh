@@ -25,6 +25,20 @@ assign_ticket () {
   fi
 }
 
+#Basic Setup Checks
+if [ ! -p "$addpipe" ]; then
+    mkfifo "$addpipe"
+    echo "Created add pipe: $addpipe"
+fi
+
+if [ ! -p "$responsepipe" ]; then
+    mkfifo "$responsepipe"
+    echo "Created response pipe: $responsepipe"
+fi
+
+chgrp "$group" "$addpipe" "$responsepipe"
+chmod g+rw "$addpipe" "$responsepipe"
+
 while true; do
   if read line < addaticket; then
     case $line in
